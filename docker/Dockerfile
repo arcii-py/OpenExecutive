@@ -81,9 +81,11 @@ RUN uv pip install --system "fastembed>=0.6.0" \
 # The pin is deliberate — a new workspace-mcp can rename tools/args that the
 # gateway's egress gates key on (_GATED_GMAIL_TOOLS / _GATED_CALENDAR_TOOLS /
 # Drive share gate in orchestrator/mcp_gateway.py). Bump together with those gates.
+# Compatibility pin: workspace-mcp 1.21.1 currently fails with pypdf 6.19.0.
 RUN uv venv /opt/workspace-mcp \
-    && uv pip install --python /opt/workspace-mcp/bin/python "workspace-mcp==1.21.1" \
-    && /opt/workspace-mcp/bin/workspace-mcp --tool-tier complete --help >/dev/null 2>&1
+    && uv pip install --python /opt/workspace-mcp/bin/python \
+         "workspace-mcp==1.21.1" "pypdf==6.18.1" \
+    && /opt/workspace-mcp/bin/workspace-mcp --tool-tier complete --help
 COPY docker/workspace-mcp-launch.sh /usr/local/bin/workspace-mcp-launch.sh
 RUN chmod +x /usr/local/bin/workspace-mcp-launch.sh
 
